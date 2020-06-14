@@ -3,24 +3,26 @@ package com.rajkumarrajan.mvvm_architecture.ui.main.view
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rajkumarrajan.mvvm_architecture.R
-import com.rajkumarrajan.mvvm_architecture.data.api.ApiHelper
-import com.rajkumarrajan.mvvm_architecture.data.api.ApiServiceImpl
 import com.rajkumarrajan.mvvm_architecture.data.model.User
-import com.rajkumarrajan.mvvm_architecture.ui.base.ViewModelFactory
 import com.rajkumarrajan.mvvm_architecture.ui.main.adapter.MainAdapter
 import com.rajkumarrajan.mvvm_architecture.ui.main.viewmodel.MainViewModel
 import com.rajkumarrajan.mvvm_architecture.utils.Status
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private lateinit var mainViewModel: MainViewModel
-    private lateinit var adapter: MainAdapter
+    private val mainViewModel: MainViewModel by viewModels()
+
+    @Inject
+    lateinit var adapter: MainAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,13 +30,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setupUI()
-        setupViewModel()
         setupAPICall()
     }
 
     private fun setupUI() {
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = MainAdapter(arrayListOf())
+        adapter = MainAdapter()
         recyclerView.addItemDecoration(
             DividerItemDecoration(
                 recyclerView.context,
@@ -67,14 +68,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun renderList(users: List<User>) {
-        adapter.addData(users)
-        adapter.notifyDataSetChanged()
-    }
-
-    private fun setupViewModel() {
-        mainViewModel = ViewModelProviders.of(
-            this,
-            ViewModelFactory(ApiHelper(ApiServiceImpl()))
-        ).get(MainViewModel::class.java)
+        adapter.apply {
+            adapter.addData(users)
+            adapter.notifyDataSetChanged()
+        }
     }
 }

@@ -8,10 +8,12 @@ import com.bumptech.glide.Glide
 import com.rajkumarrajan.mvvm_architecture.R
 import com.rajkumarrajan.mvvm_architecture.data.model.User
 import kotlinx.android.synthetic.main.item_layout.view.*
+import javax.inject.Inject
 
-class MainAdapter(
-    private val users: ArrayList<User>
+class MainAdapter @Inject constructor(
 ) : RecyclerView.Adapter<MainAdapter.DataViewHolder>() {
+
+    private var users: ArrayList<User> = ArrayList()
 
     class DataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(user: User) {
@@ -36,8 +38,11 @@ class MainAdapter(
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) =
         holder.bind(users[position])
 
-    fun addData(list: List<User>) {
-        users.addAll(list)
+    fun addData(users: List<User>) {
+        this.users.apply {
+            clear()
+            addAll(users)
+        }
     }
 
 }
