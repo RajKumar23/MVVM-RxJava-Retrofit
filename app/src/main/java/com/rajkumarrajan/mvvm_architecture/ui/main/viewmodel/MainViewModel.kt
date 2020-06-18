@@ -1,6 +1,5 @@
 package com.rajkumarrajan.mvvm_architecture.ui.main.viewmodel
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,8 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class MainViewModel @ViewModelInject constructor(private val mainRepository: MainRepository) :
-    ViewModel() {
+class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
 
     private val users = MutableLiveData<Resource<List<User>>>()
     private val compositeDisposable = CompositeDisposable()
